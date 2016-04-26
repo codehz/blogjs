@@ -1,0 +1,25 @@
+{
+  "name": "blogjs",
+  "version": "1.0.0",
+  "description": "General Architecture Of Blog(or CMS)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codehz/blogjs.git"
+  },
+  "keywords": [
+    "Blog"
+  ],
+  "author": "Code Hz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codehz/blogjs/issues"
+  },
+  "homepage": "https://github.com/codehz/blogjs#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
