@@ -7,3 +7,5 @@ Makefile.gyp
 *.Makefile
 *.target.gyp.mk
 *.node
+*.db
+log/
