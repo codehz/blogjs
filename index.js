@@ -1,1 +1,1 @@
-require('bin/blog.js');
+require('./bin/blog.js');
