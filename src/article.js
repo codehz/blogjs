@@ -33,12 +33,12 @@ module.exports = function(db) {
     const listCommentGuest = db._comment.select('author', 'content', 'ctime')
         .where('hide=0')
         .where('aid=$aid')
-        .orderBy(['ctime'])
+        .orderBy(['ctime'], true)
         .autoLimit()
         .build();
     const listComment = db._comment.select('*')
         .where('aid=$aid')
-        .orderBy(['ctime'])
+        .orderBy(['ctime'], true)
         .autoLimit()
         .build();
     const getCommentGuest = db._comment.select('author', 'content', 'ctime')
