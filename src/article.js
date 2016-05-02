@@ -30,7 +30,7 @@ module.exports = function(db) {
     const updateArticle = db._article.update('title', 'description', 'label', 'content', 'pic', 'hide')
         .where('id=$aid')
         .build();
-    const listCommentGuest = db._comment.select('*')
+    const listCommentGuest = db._comment.select('author', 'content', 'ctime')
         .where('hide=0')
         .where('aid=$aid')
         .orderBy(['ctime'])
@@ -41,7 +41,7 @@ module.exports = function(db) {
         .orderBy(['ctime'])
         .autoLimit()
         .build();
-    const getCommentGuest = db._comment.select('*')
+    const getCommentGuest = db._comment.select('author', 'content', 'ctime')
         .where('hide=0')
         .where('aid=$aid')
         .where('id=$cid')
