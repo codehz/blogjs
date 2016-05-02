@@ -10,6 +10,7 @@ const onerror = require('koa-onerror');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const validator = require('koa-validator');
+const cors = require('koa-cors');
 // const router = require('koa-router');
 const json = require('koa-json');
 require('koa-qs')(app, 'first');
@@ -29,6 +30,9 @@ onerror(app);
 app.use(session(app));
 app.use(bodyParser());
 app.use(validator());
+app.use(cors({
+    origin: '*'
+}));
 // app.use(router(app));
 app.use(json());
 

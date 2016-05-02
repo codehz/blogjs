@@ -3,9 +3,11 @@
 module.exports = function(db) {
     const listArticleGuest = db._article.select('*')
         .where('hide=0')
+        .orderBy(['mtime'])
         .autoLimit()
         .build();
     const listArticle = db._article.select('*')
+        .orderBy(['mtime'])
         .autoLimit()
         .build();
     const getArticleGuest = db._article.select('*')
@@ -14,6 +16,11 @@ module.exports = function(db) {
         .build();
     const getArticle = db._article.select('*')
         .where('id=$aid')
+        .build();
+    const getArticleNumGuest = db._article.select(['count(*)', 'num'])
+        .where('hide=0')
+        .build();
+    const getArticleNum = db._article.select(['count(*)', 'num'])
         .build();
     const deleteArticle = db._article.delete()
         .where('id=$aid')
@@ -26,10 +33,12 @@ module.exports = function(db) {
     const listCommentGuest = db._comment.select('*')
         .where('hide=0')
         .where('aid=$aid')
+        .orderBy(['ctime'])
         .autoLimit()
         .build();
     const listComment = db._comment.select('*')
         .where('aid=$aid')
+        .orderBy(['ctime'])
         .autoLimit()
         .build();
     const getCommentGuest = db._comment.select('*')
@@ -84,8 +93,11 @@ module.exports = function(db) {
             articles: { * get() {
                     const $offset = typeof this.query.offset === 'string' ? +this.query.offset : 0;
                     const $limit = 10;
-                    console.log(typeof this.query.offset, $offset);
                     this.body = yield listArticleGuest.exec({ $offset, $limit });
+                },
+                nums: { * get() {
+                        this.body = yield getArticleNumGuest.exec();
+                    }
                 },
                 $aid: { * get() {
                         this.body = yield getArticleGuest.exec({ $aid: this.aid });
@@ -151,6 +163,10 @@ module.exports = function(db) {
                     const $pic = this.request.body.pic;
                     const $hide = typeof this.request.body.hide === 'string' && +this.request.body.hide ? 1 : 0;
                     this.body = yield postArticle.exec({ $title, $description, $label, $content, $pic, $hide });
+                },
+                nums: { * get() {
+                        this.body = yield getArticleNum.exec();
+                    }
                 },
                 $aid: { * get() {
                         this.body = yield getArticle.exec({ $aid: this.aid });
