@@ -88,6 +88,8 @@ module.exports = function(db) {
         .autoLimit()
         .build();
 
+    const successMessage = { msg: 'success!' };
+
     return {
         guest: {
             articles: { * get() {
@@ -113,7 +115,8 @@ module.exports = function(db) {
                             const $ip = this.request.ip;
                             const $author = this.request.body.author;
                             const $content = this.request.body.content;
-                            this.body = yield postComment.exec({ $aid, $ip, $author, $content });
+                            yield postComment.exec({ $aid, $ip, $author, $content });
+                            this.body = successMessage;
                         },
                         $cid: { * get() {
                                 const $aid = this.aid;
@@ -162,7 +165,8 @@ module.exports = function(db) {
                     const $content = this.request.body.content;
                     const $pic = this.request.body.pic;
                     const $hide = typeof this.request.body.hide === 'string' && +this.request.body.hide ? 1 : 0;
-                    this.body = yield postArticle.exec({ $title, $description, $label, $content, $pic, $hide });
+                    yield postArticle.exec({ $title, $description, $label, $content, $pic, $hide });
+                    this.body = successMessage;
                 },
                 nums: { * get() {
                         this.body = yield getArticleNum.exec();
@@ -179,10 +183,12 @@ module.exports = function(db) {
                         const $content = this.request.body.content;
                         const $pic = this.request.body.pic;
                         const $hide = typeof this.request.body.hide === 'string' && +this.request.body.hide ? 1 : 0;
-                        this.body = yield updateArticle.exec({ $aid, $title, $description, $label, $content, $pic, $hide });
+                        yield updateArticle.exec({ $aid, $title, $description, $label, $content, $pic, $hide });
+                        this.body = successMessage;
                     },
                     * delete() {
-                        this.body = yield deleteArticle.exec({ $aid: this.aid });
+                        yield deleteArticle.exec({ $aid: this.aid });
+                        this.body = successMessage;
                     },
                     comments: { * get() {
                             const $offset = typeof this.query.offset === 'string' ? +this.query.offset : 0;
@@ -203,12 +209,14 @@ module.exports = function(db) {
                                 const $aid = this.aid;
                                 const $cid = this.cid;
                                 const $hide = typeof this.query.hide === 'string' && +this.query.hide ? 1 : 0;
-                                this.body = yield switchCommentVisibility.exec({ $aid, $cid, $hide });
+                                yield switchCommentVisibility.exec({ $aid, $cid, $hide });
+                                this.body = successMessage;
                             },
                             * delete() {
                                 const $aid = this.aid;
                                 const $cid = this.cid;
-                                this.body = yield deleteComment.exec({ $aid, $cid });
+                                yield deleteComment.exec({ $aid, $cid });
+                                this.body = successMessage;
                             }
                         }
                     }
