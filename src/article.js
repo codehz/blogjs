@@ -1,12 +1,12 @@
 "use strict";
 
 module.exports = function(db) {
-    const listArticleGuest = db._article.select('*')
+    const listArticleGuest = db._article.select('id', 'title', 'ctime', 'mtime', 'hide', 'description', 'pic')
         .where('hide=0')
         .orderBy(['mtime'])
         .autoLimit()
         .build();
-    const listArticle = db._article.select('*')
+    const listArticle = db._article.select('id', 'title', 'ctime', 'mtime', 'hide', 'description', 'pic')
         .orderBy(['mtime'])
         .autoLimit()
         .build();
