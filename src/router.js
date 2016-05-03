@@ -11,7 +11,7 @@ const regRouter = (router, src) => (method, path) => (router[method](path, path2
     .splice(1)
     .map(str => str.replace(/:/, '$')))[method]), regRouter(router, src));
 
-module.exports = function(app, db) {
+module.exports = function(app, db, config) {
     let articleApi = ArticleApi(db);
     let rootRouter = new Router();
     let adminRouter = new Router();
@@ -35,7 +35,7 @@ module.exports = function(app, db) {
                 throw err;
             }
         }
-    }, auth({ name: 'codehz', pass: '1234567' }));
+    }, auth(config.admin));
     regRouter(rootRouter, articleApi.guest)
         ('get', '/articles')
         ('get', '/search/title')

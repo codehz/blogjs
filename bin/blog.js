@@ -39,7 +39,7 @@ app.use(json());
 console.log('starting...');
 
 initDB().then(db => {
-    appRouter(app, db);
+    appRouter(app, db, config);
 
     console.log('started');
     app.listen(3000);
