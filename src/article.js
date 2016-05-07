@@ -27,7 +27,7 @@ module.exports = function(db) {
     const deleteArticle = db._article.delete()
         .where('id=$aid')
         .build();
-    const postArticle = db._article.insert('title', 'description', 'label', 'content', 'pic', 'hide')
+    const postArticle = db._article.insert('id', 'title', 'description', 'label', 'content', 'pic', 'hide')
         .build();
     const updateArticle = db._article.update('title', 'description', 'label', 'content', 'pic', 'hide')
         .where('id=$aid')
@@ -161,14 +161,14 @@ module.exports = function(db) {
                     this.body = yield listArticle.exec({ $offset, $limit });
                 },
                 * post() {
-                    // console.log(this.request.body);
+                    const $id = uuid.v4();
                     const $title = this.request.body.title;
                     const $description = this.request.body.description;
                     const $label = this.request.body.label;
                     const $content = this.request.body.content;
                     const $pic = this.request.body.pic;
                     const $hide = typeof this.request.body.hide === 'string' && +this.request.body.hide ? 1 : 0;
-                    yield postArticle.exec({ $title, $description, $label, $content, $pic, $hide });
+                    yield postArticle.exec({ $id, $title, $description, $label, $content, $pic, $hide });
                     this.body = successMessage;
                 },
                 nums: { * get() {
