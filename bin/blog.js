@@ -6,6 +6,7 @@ const config = require('../config/config.js');
 const appRouter = require('../src/router.js');
 const initDB = require('../src/init_db.js');
 const logger = require('koa-logger');
+const limit = require('koa-limit');
 const onerror = require('koa-onerror');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
@@ -15,7 +16,7 @@ const cors = require('koa-cors');
 const json = require('koa-json');
 require('koa-qs')(app, 'first');
 app.proxy = true;
-app.use(function *(next){
+app.use(function*(next) {
     if (!this.config) this.config = config;
     yield next;
 });
@@ -24,6 +25,10 @@ app.use(function *(next){
 // app.context.logger = logger;
 onerror(app);
 app.use(logger());
+app.use(limit({
+    limit: 1000,
+    interval: 1000 * 60 * 30
+}));
 app.use(session(app));
 app.use(bodyParser());
 app.use(validator());
@@ -35,9 +40,10 @@ app.use(json());
 
 console.log('starting...');
 
-initDB().then(db => {
-    appRouter(app, db, config);
+initDB()
+    .then(db => {
+        appRouter(app, db, config);
 
-    console.log('started');
-    app.listen(3000);
-});
+        console.log('started');
+        app.listen(3000);
+    });

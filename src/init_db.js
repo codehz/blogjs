@@ -23,7 +23,7 @@ module.exports = co.wrap(function*() {
         yield articleCreate.exec();
         console.log('INIT COMMENT TABLE...');
         const commentCreate = db._comment.create()
-            ._id('INTEGER', { primary: true, unique: true })
+            ._id('TEXT', { primary: true, unique: true })
             ._aid('INTEGER', { foreign: 'article', foreign_field: 'id' })
             ._ctime('TIMESTAMP', { default: `CURRENT_TIMESTAMP` })
             ._hide('BOOLEAN', { default: '1' })

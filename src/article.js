@@ -1,5 +1,7 @@
 "use strict";
 
+const uuid = require('node-uuid');
+
 module.exports = function(db) {
     const listArticleGuest = db._article.select('id', 'title', 'ctime', 'mtime', 'hide', 'description', 'pic')
         .where('hide=0')
@@ -50,7 +52,7 @@ module.exports = function(db) {
         .where('aid=$aid')
         .where('id=$cid')
         .build();
-    const postComment = db._comment.insert('aid', 'ip', 'author', 'content')
+    const postComment = db._comment.insert('id', 'aid', 'ip', 'author', 'content')
         .build();
     const deleteComment = db._comment.delete()
         .where('aid=$aid')
@@ -111,11 +113,12 @@ module.exports = function(db) {
                             this.body = yield listCommentGuest.exec({ $offset, $limit, $aid });
                         },
                         * post() {
+                            const $id = uuid.v4();
                             const $aid = this.aid;
                             const $ip = this.request.ip;
                             const $author = this.request.body.author;
                             const $content = this.request.body.content;
-                            yield postComment.exec({ $aid, $ip, $author, $content });
+                            yield postComment.exec({ $id, $aid, $ip, $author, $content });
                             this.body = successMessage;
                         },
                         $cid: { * get() {
