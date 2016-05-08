@@ -72,4 +72,7 @@ module.exports = function(app, db, config) {
     console.log(`+ admin api`);
     app.use(rootRouter.routes(), rootRouter.allowedMethods());
     console.log(`+ api`);
+
+    app.listen(3000);
+    console.log(`listening`);
 };
