@@ -12,9 +12,12 @@ const regRouter = (router, src) => (method, path) => (router[method](path, path2
     .map(str => str.replace(/:/, '$')))[method]), regRouter(router, src));
 
 module.exports = function(app, db, config) {
+    console.log(`init db apis`);
     let articleApi = ArticleApi(db);
+    console.log(`init routers`);
     let rootRouter = new Router();
     let adminRouter = new Router();
+    console.log(`- param`);
     rootRouter.param('aid', function*(aid, next) {
             this.aid = aid;
             yield next;
@@ -23,6 +26,7 @@ module.exports = function(app, db, config) {
             this.cid = cid;
             yield next;
         });
+    console.log(`- admin auth`);
     adminRouter.use(function*(next) {
         try {
             yield next;
@@ -36,6 +40,7 @@ module.exports = function(app, db, config) {
             }
         }
     }, auth(config.admin));
+    console.log(`- guest api`);
     regRouter(rootRouter, articleApi.guest)
         ('get', '/articles')
         ('get', '/search/title')
@@ -46,6 +51,7 @@ module.exports = function(app, db, config) {
         ('get', '/articles/:aid/comments')
         ('get', '/articles/:aid/comments/:cid')
         ('post', '/articles/:aid/comments');
+    console.log(`- admin api`);
     regRouter(adminRouter, articleApi.admin)
         ('get', '/articles')
         ('get', '/search/title')
