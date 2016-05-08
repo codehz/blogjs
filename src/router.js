@@ -69,5 +69,7 @@ module.exports = function(app, db, config) {
         ('post', '/articles');
 
     rootRouter.use('/admin', adminRouter.routes(), adminRouter.allowedMethods());
+    console.log(`+ admin api`);
     app.use(rootRouter.routes(), rootRouter.allowedMethods());
+    console.log(`+ api`);
 };
