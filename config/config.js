@@ -7,6 +7,7 @@ if (process.env.BLOGJS_CONFIG) {
 } else {
     let config = {
         logDir: path.join(__dirname, '..', 'log'),
+        db: path.join(__dirname, '..', 'blog.db'),
         admin: { name: 'codehz', pass: '1234567' }
     };
 

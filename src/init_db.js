@@ -2,8 +2,9 @@
 
 const DB = require('../lib/db');
 const co = require('co');
+const config = require('../config/config');
 
-const db = new DB('a.db');
+const db = new DB(config.db);
 
 // const delay = t => new Promise(r => setTimeout(r, t));
 
